@@ -1,10 +1,25 @@
-import *as ActionTypes from '../Actions/type';
+export default function reducer(state = {
+  isLoginSuccess: false,
+  isLoginPending: false,
+  loginError: null
+}, action) {
+  switch (action.type) {
+    case SET_LOGIN_PENDING:
+      return Object.assign({}, state, {
+        isLoginPending: action.isLoginPending
+      });
 
-const validate = val => {
-    const errors = {};
-    if (!val.UserName) {
-      console.log('First Name is required');
-      errors.firstName = 'Required';
-    }
-    return errors;
-};
+    case SET_LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        isLoginSuccess: action.isLoginSuccess
+      });
+
+    case SET_LOGIN_ERROR:
+      return Object.assign({}, state, {
+        loginError: action.loginError
+      });
+
+    default:
+      return state;
+  }
+}

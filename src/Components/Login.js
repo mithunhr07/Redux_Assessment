@@ -1,126 +1,105 @@
-// import React, { Component } from 'react';
-// import './Login.css'
-// import {} from '../Actions/Loginaction';
-// class Login extends Component {
-//     render() {
-//         return (
-//             <div>
-//                 <form class="form">
-//                 <label>UserName:</label>
-// 		        <input type="text" name="UserName" placeholder="Enter username"></input><br></br><br></br>
-//                 <label>Password:</label>
-// 		        <input type="text" name="password" placeholder="Enter your password"></input><br></br><br></br>
-//                 <button type="Login" value="Login">Login</button>
-//                 <button type="Register" value="Register">Register</button>
-//                 </form>
-//             </div>
-//         );
-//     }
-// }
-// const mapStoreToProps=(state)=>
-// {
-// const {UserName, password}=state.LoginReduce;
-// return {UserName, password};
-// };
-// export default connect(mapStoreToProps,{})(Login);
+import React, { Component } from 'react';
+// import './Register.css';
+import '../Utils/BrowerHistory';
+import BrowerHistory from '../Utils/BrowerHistory';
+class Login extends Component {
+    constructor() {
+        super();
+        this.state = {
+          fields: {},
+          errors: {}
+        }
+  
+        this.handleChange = this.handleChange.bind(this);
+        this.submituserRegistrationForm = this.submituserRegistrationForm.bind(this);
+  
+      };
+  
+      handleChange(e) {
+        let fields = this.state.fields;
+        fields[e.target.name] = e.target.value;
+        this.setState({
+          fields
+        });
+  
+      }
+  
+      submituserRegistrationForm(e) {
+        e.preventDefault();
+        if (this.validateForm()) {
+            let fields = {};
+            fields["username"] = "";
+            fields["password"] = "";
+            this.setState({fields:fields});
+            alert("Form submitted");
+        }
+  
+      }
+  
+      validateForm() {
+  
+        let fields = this.state.fields;
+        let errors = {};
+        let formIsValid = true;
+  
+        if (!fields["username"]) {
+          formIsValid = false;
+          errors["username"] = "*Please enter your username.";
+        }
+  
+        if (typeof fields["username"] !== "undefined") {
+          if (!fields["username"].match(/^[a-zA-Z ]*$/)) {
+            formIsValid = false;
+            errors["username"] = "*Please enter alphabet characters only.";
+          }
+        }
+  
+        if (!fields["password"]) {
+          formIsValid = false;
+          errors["password"] = "*Please enter your password.";
+        }
+  
+        if (typeof fields["password"] !== "undefined") {
+          if (!fields["password"].match(/^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&]).*$/)) {
+            formIsValid = false;
+            errors["password"] = "*Please enter secure and strong password.";
+          }
+        }
+  
+        this.setState({
+          errors: errors
+        });
+        return formIsValid;
+  
+  
+      }
+  
+  onHandleClick(){
+    BrowerHistory.push('/Register');
+  }
+  
+    render() {
+      return (
+      <div id="main-registration-container">
+       <div id="register">
+          <h3>Login page</h3>
+          <form method="post"  name="userRegistrationForm"  onSubmit= {this.submituserRegistrationForm} >
+          <label>Name</label>
+          <input type="text" name="username" value={this.state.fields.username} onChange={this.handleChange} />
+          <div className="errorMsg">{this.state.errors.username}</div>
+          <label>Password</label>
+          <input type="password" name="password" value={this.state.fields.password} onChange={this.handleChange} />
+          <div className="errorMsg">{this.state.errors.password}</div>
+          <input type="submit" className="button"  value="Login"/>
+          <input type="submit" onClick={this.onHandleClick} className="button"  value="Register"/>
+          </form>
+      </div>
+  </div>
+  
+        );
+    }
+  
+  
+  }
 
-
-// import React, { Component } from 'react';
-// // import { Field, reduxForm } from 'redux-form';
-
-// const validate = values => {
-//     const errors = {}
-//     if (!values.firstName) {
-//       errors.firstName = 'Required'
-//     } else if (values.firstName.length < 2) {
-//       errors.firstName = 'Minimum be 2 characters or more'
-//     }
-//     if (!values.email) {
-//       errors.email = 'Required'
-//     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-//       errors.email = 'Invalid email address'
-//     }
-//     if (!values.lastName) {
-//         errors.lastName = 'Required'
-//       } else if (values.lastName.length < 2) {
-//         errors.lastName = 'Minimum be 2 characters or more'
-//       }
-//     return errors
-//   }
-
-// const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
-//     <div>
-//       <label className="control-label">{label}</label>
-//       <div>
-//         <input {...input} placeholder={label} type={type} className="form-control" />
-//         {touched && ((error && <span className="text-danger">{error}</span>) || (warning && <span>{warning}</span>))}
-//       </div>
-//     </div>
-//   )
-
-// let FormCode = props => {
-//   const { handleSubmit, pristine, submitting } = props;
-//   return (
-//     <form onSubmit={ handleSubmit }>
-//       <div className="form-group">
-//         <Field name="firstName" component={renderField} label="First Name" />
-//       </div>
-//       <div className="form-group">
-//         <Field name="lastName" component={renderField} label="Last Name" />
-//       </div>
-//       <div className="form-group">
-//         <Field name="email" component={renderField} label="Email" />
-//       </div>
-//       <div className="form-group">
-//         <button type="submit" disabled={pristine || submitting} className="btn btn-primary">Submit</button>
-//       </div>
-//     </form>
-//   )
-// }
-// FormCode = reduxForm({
-//   form: 'contact',
-//   validate,
-// })(FormCode);
-
-// export default FormCode;
-
-
-const isEmail = (val) => /* check if val is email */
-
-// HTML5 validation
-// Works with any HTML5 constraint validation attributes
-<Control.text type="email" model="user.email" required />
-
-// Keyed validation
-<Control.text
-  model="user.email"
-  validators={{
-    required: (val) => val && val.length,
-    isEmail, // ES6 property shorthand
-  }}
-/>
-
-// Keyed errors
-<Control.text
-  model="user.email"
-  errors={{
-    required: (val) => !val || !val.length,
-    isEmail: (val) => !isEmail(val),
-  }}
-/>
-
-// Form-level validation
-const longEnough = (val) => val && val.length > 8;
-
-<Form
-  model="user"
-  validators={{
-    '': {
-      // Form-level validator
-      passwordsMatch: (vals) => vals.password === vals.confirmPassword,
-    },
-    // Field-level validators
-    password: { longEnough },
-    confirmPassword: { longEnough },
-  }}
-/>
+export default Login;
